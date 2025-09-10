@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for Deadline Radar */
+.task-card {
+  @apply bg-white rounded-lg shadow-md p-4 border-l-4 border-radar-blue hover:shadow-lg transition-shadow;
+}
+
+.task-card.urgent {
+  @apply border-radar-red;
+}
+
+.task-card.completed {
+  @apply opacity-75 bg-gray-50 border-gray-300;
+}
+
+.countdown-timer {
+  @apply text-lg font-bold;
+}
+
+.countdown-timer.urgent {
+  @apply text-radar-red;
+}
+
+.countdown-timer.warning {
+  @apply text-radar-orange;
+}
+
+.countdown-timer.normal {
+  @apply text-radar-green;
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
