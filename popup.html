@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deadline Radar</title>
+  <link rel="stylesheet" href="styles/output.css">
+  <style>
+    body {
+      width: 400px;
+      max-height: 600px;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .scrollable {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <h1 class="text-lg font-semibold">Deadline Radar</h1>
+      </div>
+      <div class="flex space-x-1">
+        <button id="refreshBtn" class="p-2 hover:bg-white hover:bg-opacity-10 rounded" title="Refresh">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+        <button id="dashboardBtn" class="p-2 hover:bg-white hover:bg-opacity-10 rounded" title="Open Dashboard">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-4">
+    <!-- Current Page Tasks -->
+    <div class="mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-medium text-gray-700">Current Page</h2>
+        <span id="currentPageCount" class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">0 tasks</span>
+      </div>
+      <div id="currentPageTasks" class="space-y-2 scrollable">
+        <div id="noCurrentTasks" class="text-center text-gray-500 text-sm py-8">
+          <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+          </svg>
+          <p>No deadlines detected on this page</p>
+          <p class="text-xs mt-1">Try refreshing or visiting a page with assignments</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="mb-4 bg-white rounded-lg border p-3">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-700">Quick Stats</h3>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-red-50 rounded p-2">
+          <div id="urgentCount" class="text-lg font-bold text-red-600">0</div>
+          <div class="text-xs text-red-700">Urgent</div>
+        </div>
+        <div class="bg-orange-50 rounded p-2">
+          <div id="todayCount" class="text-lg font-bold text-orange-600">0</div>
+          <div class="text-xs text-orange-700">Today</div>
+        </div>
+        <div class="bg-green-50 rounded p-2">
+          <div id="totalCount" class="text-lg font-bold text-green-600">0</div>
+          <div class="text-xs text-green-700">Total</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Tasks -->
+    <div class="mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-medium text-gray-700">Recent Tasks</h2>
+        <button id="viewAllBtn" class="text-xs text-blue-600 hover:text-blue-800">View All</button>
+      </div>
+      <div id="recentTasks" class="space-y-2 scrollable max-h-48">
+        <!-- Recent tasks will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Template -->
+  <template id="taskTemplate">
+    <div class="task-card border-l-4 p-3 cursor-pointer hover:shadow-md transition-all">
+      <div class="flex items-start justify-between">
+        <div class="flex-1 min-w-0">
+          <h3 class="task-title text-sm font-medium text-gray-900 truncate"></h3>
+          <p class="task-description text-xs text-gray-600 mt-1 line-clamp-2"></p>
+          <div class="flex items-center mt-2 space-x-2">
+            <span class="task-countdown text-xs font-medium"></span>
+            <span class="task-priority text-xs px-2 py-1 rounded-full"></span>
+          </div>
+        </div>
+        <div class="flex space-x-1 ml-2">
+          <button class="save-btn p-1 text-gray-400 hover:text-blue-600" title="Save Task">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6a1 1 0 10-2 0v5.586l-1.293-1.293z"></path>
+            </svg>
+          </button>
+          <button class="complete-btn p-1 text-gray-400 hover:text-green-600" title="Mark Complete">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="popup.js"></script>
+</body>
+</html>
