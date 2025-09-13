@@ -37,10 +37,16 @@ function renderTimeline(tasks) {
         <option value='Not Started' ${task.status==='Not Started'?'selected':''}>Not Started</option>
         <option value='In Progress' ${task.status==='In Progress'?'selected':''}>In Progress</option>
         <option value='Completed' ${task.status==='Completed'?'selected':''}>Completed</option>
-      </select>`;
+      </select>
+      <button class='ml-2 px-2 py-1 bg-red-500 text-white rounded unsave-btn'>Unsave</button>`;
     div.querySelector('.status-select').onchange = (e) => updateStatus(task.id, e.target.value);
+    div.querySelector('.unsave-btn').onclick = () => unsaveTask(task);
     container.appendChild(div);
   });
+}
+function unsaveTask(task) {
+  chrome.runtime.sendMessage({ type: 'DEADLINE_RADAR_UNSAVE', task });
+  setTimeout(loadTasks, 300);
 }
 
 function updateStatus(id, status) {

@@ -17,22 +17,9 @@ function extractTasksAndDeadlines(text) {
   const dateRegex = /(\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[ .,-]*\d{1,2}(?:[ .,-]*\d{2,4})?|\b\d{4}-\d{2}-\d{2}\b|\b\d{1,2}\/\d{1,2}\/\d{2,4}\b)/i;
   const lines = text.split(/\n|\. |! |\?/);
   let results = [];
-  // Keywords/domains to ignore
-  const ignorePatterns = [
-    /youtube\.com/i,
-    /maps\.google\.com/i,
-    /video/i,
-    /watch/i,
-    /play/i,
-    /stream/i,
-    /music/i,
-    /movie/i
-  ];
-  lines.forEach(line => {
+  for (let i = 0; i < lines.length && results.length < 5; i++) {
+    const line = lines[i];
     if (actionVerbs.test(line)) {
-      // Ignore if line or URL contains unwanted patterns
-      const shouldIgnore = ignorePatterns.some(pat => pat.test(line) || pat.test(window.location.href));
-      if (shouldIgnore) return;
       const dateMatch = line.match(dateRegex);
       if (dateMatch) {
         // Use dayjs to parse the date
@@ -47,7 +34,7 @@ function extractTasksAndDeadlines(text) {
         }
       }
     }
-  });
+  }
   console.log('[Deadline Radar] Detected tasks:', results);
   return results;
 }
